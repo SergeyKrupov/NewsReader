@@ -10,8 +10,8 @@ import Foundation
 import ObjectMapper
 
 struct Article {
-    let source: Source
-    let author: String
+    let source: Source?
+    let author: String?
     let title: String
     let description: String
     let url: String
@@ -23,8 +23,8 @@ struct Article {
 extension Article: ImmutableMappable {
 
     init(map: Map) throws {
-        source = try map.value("source")
-        author = try map.value("author")
+        source = try? map.value("source")
+        author = try? map.value("author")
         title = try map.value("title")
         description = try map.value("description")
         url = try map.value("url")
