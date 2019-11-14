@@ -5,6 +5,7 @@ PODS:
   - Moya/Core (13.0.1):
     - Alamofire (~> 4.1)
     - Result (~> 4.1)
+  - ObjectMapper (3.5.1)
   - Result (4.1.0)
   - RxCocoa (5.0.1):
     - RxRelay (~> 5)
@@ -18,6 +19,7 @@ PODS:
 
 DEPENDENCIES:
   - Moya (~> 13.0)
+  - ObjectMapper (~> 3.5.1)
   - RxCocoa (~> 5.0)
   - RxSwift (~> 5.0)
   - SnapKit (~> 5.0)
@@ -28,6 +30,7 @@ SPEC REPOS:
   trunk:
     - Alamofire
     - Moya
+    - ObjectMapper
     - Result
     - RxCocoa
     - RxRelay
@@ -39,6 +42,7 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
   Moya: f4a4b80ff2f8a4ffc208dfb31cd91636622fee6e
+  ObjectMapper: 70187b8941977c62ccfb423caf6b50be405cabf0
   Result: bd966fac789cc6c1563440b348ab2598cc24d5c7
   RxCocoa: e741b9749968e8a143e2b787f1dfbff2b63d0a5c
   RxRelay: 89d54507f4fd4d969e6ec1d4bd7f3673640b4640
@@ -47,6 +51,6 @@ SPEC CHECKSUMS:
   SwiftLint: fc9859e4e1752340664851f667bb1898b9c90114
   Swinject: ddf78b8486dd9b71a667b852cad919ab4484478e
 
-PODFILE CHECKSUM: 9930c62a141e2740f0dabb8a46bafde8ea892bdc
+PODFILE CHECKSUM: 7042c55b7adbea43a6d0e2769d4d993ba976ee42
 
 COCOAPODS: 1.8.4
