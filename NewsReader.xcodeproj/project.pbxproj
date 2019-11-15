@@ -15,8 +15,8 @@
 		A58B77C6237E8F4900CDBC3D /* ArticlesPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58B77C5237E8F4900CDBC3D /* ArticlesPresenter.swift */; };
 		A58B77C8237E8FFB00CDBC3D /* ArticlesAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58B77C7237E8FFB00CDBC3D /* ArticlesAssembly.swift */; };
 		A58B77CB237E931A00CDBC3D /* DI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58B77CA237E931A00CDBC3D /* DI.swift */; };
+		A5B5B387237F1440007B5DDE /* Canceller.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B5B386237F1440007B5DDE /* Canceller.swift */; };
 		A5B71AC1237DA73E00F62A22 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B71AC0237DA73E00F62A22 /* AppDelegate.swift */; };
-		A5B71AC3237DA73E00F62A22 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B71AC2237DA73E00F62A22 /* ViewController.swift */; };
 		A5B71AC8237DA73F00F62A22 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5B71AC7237DA73F00F62A22 /* Assets.xcassets */; };
 		A5B71ACB237DA73F00F62A22 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5B71AC9237DA73F00F62A22 /* LaunchScreen.storyboard */; };
 		A5CA5F82237DAF26005D5D15 /* Article.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CA5F81237DAF26005D5D15 /* Article.swift */; };
@@ -39,9 +39,9 @@
 		A58B77C5237E8F4900CDBC3D /* ArticlesPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticlesPresenter.swift; sourceTree = "<group>"; };
 		A58B77C7237E8FFB00CDBC3D /* ArticlesAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticlesAssembly.swift; sourceTree = "<group>"; };
 		A58B77CA237E931A00CDBC3D /* DI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DI.swift; sourceTree = "<group>"; };
+		A5B5B386237F1440007B5DDE /* Canceller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Canceller.swift; sourceTree = "<group>"; };
 		A5B71ABD237DA73E00F62A22 /* NewsReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NewsReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5B71AC0237DA73E00F62A22 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		A5B71AC2237DA73E00F62A22 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		A5B71AC7237DA73F00F62A22 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A5B71ACA237DA73F00F62A22 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A5B71ACC237DA73F00F62A22 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -114,6 +114,14 @@
 			path = DI;
 			sourceTree = "<group>";
 		};
+		A5B5B385237F1427007B5DDE /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				A5B5B386237F1440007B5DDE /* Canceller.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		A5B71AB4237DA73E00F62A22 = {
 			isa = PBXGroup;
 			children = (
@@ -135,12 +143,12 @@
 		A5B71ABF237DA73E00F62A22 /* NewsReader */ = {
 			isa = PBXGroup;
 			children = (
+				A5B5B385237F1427007B5DDE /* Helpers */,
 				A58B77C9237E930C00CDBC3D /* DI */,
 				A58B77C2237E8E9600CDBC3D /* ArticlesViewController */,
 				A58B77BA237E67D700CDBC3D /* Storage */,
 				A5CA5F87237DC31B005D5D15 /* NewsApiService */,
 				A5B71AC0237DA73E00F62A22 /* AppDelegate.swift */,
-				A5B71AC2237DA73E00F62A22 /* ViewController.swift */,
 				A5B71AC7237DA73F00F62A22 /* Assets.xcassets */,
 				A5B71AC9237DA73F00F62A22 /* LaunchScreen.storyboard */,
 				A5B71ACC237DA73F00F62A22 /* Info.plist */,
@@ -325,11 +333,11 @@
 				A5CA5F8D237DC675005D5D15 /* EverythingRequest.swift in Sources */,
 				A5CA5F86237DBD43005D5D15 /* EverythingResponse.swift in Sources */,
 				A5CA5F84237DBC81005D5D15 /* Source.swift in Sources */,
-				A5B71AC3237DA73E00F62A22 /* ViewController.swift in Sources */,
 				A5B71AC1237DA73E00F62A22 /* AppDelegate.swift in Sources */,
 				A5CA5F82237DAF26005D5D15 /* Article.swift in Sources */,
 				A58B77C6237E8F4900CDBC3D /* ArticlesPresenter.swift in Sources */,
 				A58B77CB237E931A00CDBC3D /* DI.swift in Sources */,
+				A5B5B387237F1440007B5DDE /* Canceller.swift in Sources */,
 				A58B77BD237E689B00CDBC3D /* Articles.xcdatamodeld in Sources */,
 				A5CA5F89237DC339005D5D15 /* NewsApiService.swift in Sources */,
 				A5CA5F90237DD732005D5D15 /* NewsApiServiceAssembly.swift in Sources */,

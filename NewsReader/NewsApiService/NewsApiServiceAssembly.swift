@@ -15,7 +15,7 @@ final class NewsApiServiceAssembly: Assembly {
         container.register(NewsApiService.self) { _ in
             NewsApiServiceImpl(
                 provider: MoyaProvider<NewsApi>(),
-                queue: .global()
+                queue: .main
             )
         }
         .inObjectScope(.container)

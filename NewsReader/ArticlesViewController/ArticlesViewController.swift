@@ -10,9 +10,10 @@ import SnapKit
 import UIKit
 
 protocol ArticlesPresenterProtocol {
-    var numberOfArticles: Int { get }
-
+    func numberOfArticles() -> Int
     func article(at indexPath: IndexPath) -> ArticleObject
+    func willDisplayArticle(at indexPath: IndexPath)
+
     func didFinishLoading()
     func search(query: String)
 }
@@ -100,12 +101,15 @@ final class ArticlesViewController: UIViewController, ArticlesViewProtocol {
 
 extension ArticlesViewController: UITableViewDelegate {
 
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        presenter.willDisplayArticle(at: indexPath)
+    }
 }
 
 extension ArticlesViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        presenter.numberOfArticles
+        presenter.numberOfArticles()
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
