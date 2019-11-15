@@ -11,7 +11,7 @@ import UIKit
 final class ArticleTableViewCell: UITableViewCell {
 
     func setup(with article: ArticleObject) {
-        
+        textLabel?.text = article.articleDescription
     }
 
     // MARK: - Lifecycle

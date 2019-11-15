@@ -36,6 +36,12 @@ final class ArticlesViewController: UIViewController, ArticlesViewProtocol {
         presenter.search(query: "bitcoin", ignoreCache: true)
     }
 
+    // MARK: - ArticlesViewProtocol
+
+    func reloadTable() {
+        tableView.reloadData()
+    }
+
     // MARK: - Private
     private let articleCellID = "ArticleTableViewCell"
 

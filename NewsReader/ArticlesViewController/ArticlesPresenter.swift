@@ -11,6 +11,7 @@ import Moya
 
 protocol ArticlesViewProtocol: class {
 
+    func reloadTable()
 }
 
 final class ArticlesPresenter: ArticlesPresenterProtocol {
@@ -21,6 +22,16 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
         self.container = container
 
         context = container.newBackgroundContext()
+
+        let center = NotificationCenter.default
+        token = center.addObserver(forName: .NSManagedObjectContextDidSave, object: context, queue: OperationQueue.main) { [weak self] _ in
+            guard let `self` = self else {
+                return
+            }
+
+            try? self.fetchedResultsController.performFetch()
+            self.view?.reloadTable()
+        }
     }
 
     deinit {
@@ -46,6 +57,8 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
     private let container: PersistentContainer
 
     private let context: NSManagedObjectContext
+    private var requestCancellable: Cancellable?
+    private var token: NSObjectProtocol?
     private lazy var fetchedResultsController: NSFetchedResultsController<ArticleObject> = {
         let request: NSFetchRequest<ArticleObject> = ArticleObject.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(keyPath: \ArticleObject.index, ascending: true)]
@@ -54,8 +67,6 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
                                           sectionNameKeyPath: nil,
                                           cacheName: nil)
     }()
-
-    private var requestCancellable: Cancellable?
 
     private func searchIgnoringCache(query: String) {
         let request = EverythingRequest(request: query)
