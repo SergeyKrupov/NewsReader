@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		7EF2B7A59AB213297ACEFC2C /* Pods_NewsReader.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9485CA1E6947113C89C18BB2 /* Pods_NewsReader.framework */; };
+		A5400291237E9BC400475276 /* PersistentContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5400290237E9BC400475276 /* PersistentContainer.swift */; };
+		A5400293237E9BFB00475276 /* PersistentContainerAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5400292237E9BFB00475276 /* PersistentContainerAssembly.swift */; };
 		A58B77BD237E689B00CDBC3D /* Articles.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A58B77BB237E689B00CDBC3D /* Articles.xcdatamodeld */; };
 		A58B77BF237E6CD100CDBC3D /* ContentDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58B77BE237E6CD100CDBC3D /* ContentDownloadManager.swift */; };
 		A58B77C4237E8ED500CDBC3D /* ArticlesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58B77C3237E8ED500CDBC3D /* ArticlesViewController.swift */; };
@@ -31,6 +33,8 @@
 /* Begin PBXFileReference section */
 		81F38D5B85B538C63935D141 /* Pods-NewsReader.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NewsReader.release.xcconfig"; path = "Target Support Files/Pods-NewsReader/Pods-NewsReader.release.xcconfig"; sourceTree = "<group>"; };
 		9485CA1E6947113C89C18BB2 /* Pods_NewsReader.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NewsReader.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A5400290237E9BC400475276 /* PersistentContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentContainer.swift; sourceTree = "<group>"; };
+		A5400292237E9BFB00475276 /* PersistentContainerAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentContainerAssembly.swift; sourceTree = "<group>"; };
 		A58B77BC237E689B00CDBC3D /* Articles.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Articles.xcdatamodel; sourceTree = "<group>"; };
 		A58B77BE237E6CD100CDBC3D /* ContentDownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentDownloadManager.swift; sourceTree = "<group>"; };
 		A58B77C3237E8ED500CDBC3D /* ArticlesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticlesViewController.swift; sourceTree = "<group>"; };
@@ -88,6 +92,8 @@
 			children = (
 				A58B77BB237E689B00CDBC3D /* Articles.xcdatamodeld */,
 				A58B77BE237E6CD100CDBC3D /* ContentDownloadManager.swift */,
+				A5400290237E9BC400475276 /* PersistentContainer.swift */,
+				A5400292237E9BFB00475276 /* PersistentContainerAssembly.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -316,6 +322,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A5400293237E9BFB00475276 /* PersistentContainerAssembly.swift in Sources */,
+				A5400291237E9BC400475276 /* PersistentContainer.swift in Sources */,
 				A58B77C8237E8FFB00CDBC3D /* ArticlesAssembly.swift in Sources */,
 				A5CA5F8D237DC675005D5D15 /* EverythingRequest.swift in Sources */,
 				A5CA5F86237DBD43005D5D15 /* EverythingResponse.swift in Sources */,

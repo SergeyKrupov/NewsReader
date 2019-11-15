@@ -14,9 +14,10 @@ protocol ArticlesViewProtocol: class {
 
 final class ArticlesPresenter: ArticlesPresenterProtocol {
 
-    internal init(view: ArticlesViewProtocol?, newsService: NewsApiService) {
+    internal init(view: ArticlesViewProtocol?, newsService: NewsApiService, persistentContainer: PersistentContainer) {
         self.view = view
         self.newsService = newsService
+        self.persistentContainer = persistentContainer
     }
 
     // MARK: - ArticlesPresenterProtocol
@@ -29,4 +30,5 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
     // MARK: - Private
     private weak var view: ArticlesViewProtocol?
     private let newsService: NewsApiService
+    private let persistentContainer: PersistentContainer
 }

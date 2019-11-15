@@ -12,5 +12,6 @@ let container: Container = { () -> Container in
     let container = Container()
     NewsApiServiceAssembly().assemble(container: container)
     ArticlesAssembly().assemble(container: container)
+    PersistentContainerAssembly().assemble(container: container)
     return container
 }()

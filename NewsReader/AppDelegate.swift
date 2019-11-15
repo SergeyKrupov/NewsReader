@@ -16,6 +16,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
+        let persistentContainer = container.resolve(PersistentContainer.self)!
+        persistentContainer.loadPersistentStores { _, error in
+            assert(error == nil)
+        }
+
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = container.resolve(ArticlesViewController.self)
         window?.makeKeyAndVisible()

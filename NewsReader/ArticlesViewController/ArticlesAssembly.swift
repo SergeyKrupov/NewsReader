@@ -16,7 +16,8 @@ final class ArticlesAssembly: Assembly {
             let view = ArticlesViewController()
             let presenter = ArticlesPresenter(
                 view: view,
-                newsService: resolver.resolve(NewsApiService.self)!
+                newsService: resolver.resolve(NewsApiService.self)!,
+                persistentContainer: resolver.resolve(PersistentContainer.self)!
             )
 
             view.presenter = presenter
