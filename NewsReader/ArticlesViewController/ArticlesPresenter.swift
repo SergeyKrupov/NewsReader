@@ -51,6 +51,11 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
         searchIgnoringCache(query: query)
     }
 
+    func didFinishLoading() {
+        try? self.fetchedResultsController.performFetch()
+        view?.reloadTable()
+    }
+
     // MARK: - Private
     private weak var view: ArticlesViewProtocol?
     private let newsService: NewsApiService

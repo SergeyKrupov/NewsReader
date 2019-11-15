@@ -12,6 +12,7 @@ import UIKit
 protocol ArticlesPresenterProtocol {
     var numberOfArticles: Int { get }
 
+    func didFinishLoading()
     func article(at indexPath: IndexPath) -> ArticleObject
     func search(query: String, ignoreCache: Bool)
 }
@@ -33,7 +34,7 @@ final class ArticlesViewController: UIViewController, ArticlesViewProtocol {
             make.bottom.equalTo(tableView.safeAreaLayoutGuide.snp.bottom)
         }
 
-        presenter.search(query: "bitcoin", ignoreCache: true)
+        presenter.didFinishLoading()
     }
 
     // MARK: - ArticlesViewProtocol
