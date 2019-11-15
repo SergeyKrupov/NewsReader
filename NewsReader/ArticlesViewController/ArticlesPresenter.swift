@@ -6,8 +6,10 @@
 //  Copyright © 2019 Sergey V. Krupov. All rights reserved.
 //
 
+import CoreData
+
 protocol ArticlesViewProtocol: class {
-    
+
 }
 
 final class ArticlesPresenter: ArticlesPresenterProtocol {
@@ -18,6 +20,11 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
     }
 
     // MARK: - ArticlesPresenterProtocol
+    var numberOfArticles: Int = 0
+
+    func article(at indexPath: IndexPath) -> ArticleObject {
+        fatalError()
+    }
 
     // MARK: - Private
     private weak var view: ArticlesViewProtocol?

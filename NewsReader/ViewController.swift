@@ -9,6 +9,7 @@
 import Swinject
 import UIKit
 
+// TODO: remove
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
