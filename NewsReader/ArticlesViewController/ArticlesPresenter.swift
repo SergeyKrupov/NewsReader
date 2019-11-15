@@ -22,14 +22,13 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
         self.newsService = newsService
         self.container = container
 
-        context = container.newBackgroundContext()
+        let context = container.backgroundContext
 
         let center = NotificationCenter.default
         token = center.addObserver(forName: .NSManagedObjectContextDidSave, object: context, queue: OperationQueue.main) { [weak self] _ in
             guard let `self` = self else {
                 return
             }
-
             try? self.fetchedResultsController.performFetch()
             self.view?.reloadTable()
         }
@@ -69,7 +68,6 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
     private let newsService: NewsApiService
     private let container: PersistentContainer
     private let pageSize = 20
-    private let context: NSManagedObjectContext
     private let canceller = Canceller()
 
     private weak var view: ArticlesViewProtocol?
@@ -86,7 +84,7 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
 
     private func performSearch(query: String) {
         performingAction = .search
-        let request = EverythingRequest(request: query, pageSize: pageSize)
+        let request = EverythingRequest(query: query, pageSize: pageSize)
         canceller << newsService.requestEverything(request) { [weak self] result in
             assert(Thread.isMainThread)
             guard let `self` = self else {
@@ -98,28 +96,7 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
                 return
             }
 
-            self.context.perform { [context = self.context, container = self.container] in
-                container.dropAllArticles(from: context)
-
-                let requestObject = container.requestObject(from: context)
-                requestObject.query = query
-                requestObject.totalArticles = Int32(response.totalResults)
-                requestObject.fetchedArticles = Int32(response.articles.count)
-                requestObject.fetchedPages = 1
-
-                for (offset, article) in response.articles.enumerated() {
-                    let articleObject = ArticleObject(context: context)
-                    articleObject.articleDescription = article.description
-                    articleObject.author = article.author
-                    articleObject.content = article.content
-                    articleObject.imageURL = article.urlToImage
-                    articleObject.publicationDate = article.publishedAt
-                    articleObject.title = article.title
-                    articleObject.index = Int32(offset)
-                }
-
-                try? context.save()
-            }
+            self.container.storeArticles(from: response, request: request)
         }
     }
 
@@ -133,7 +110,7 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
         let requestObject = self.container.requestObject(from: container.viewContext)
         let query = requestObject.query!
         let page = requestObject.fetchedPages
-        let request = EverythingRequest(request: query, pageSize: self.pageSize, page: Int(page))
+        let request = EverythingRequest(query: query, pageSize: self.pageSize, page: Int(page))
         canceller << self.newsService.requestEverything(request) { [weak self] result in
             assert(Thread.isMainThread)
             guard let `self` = self else {
@@ -145,29 +122,7 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
                 return
             }
 
-            self.context.perform { [context = self.context, container = self.container] in
-
-                let requestObject = container.requestObject(from: context)
-                let index = requestObject.totalArticles
-
-                requestObject.query = query
-                requestObject.totalArticles += Int32(response.totalResults)
-                requestObject.fetchedArticles = Int32(response.articles.count)
-                requestObject.fetchedPages = page + 1
-
-                for (offset, article) in response.articles.enumerated() {
-                    let articleObject = ArticleObject(context: context)
-                    articleObject.articleDescription = article.description
-                    articleObject.author = article.author
-                    articleObject.content = article.content
-                    articleObject.imageURL = article.urlToImage
-                    articleObject.publicationDate = article.publishedAt
-                    articleObject.title = article.title
-                    articleObject.index = index + Int32(offset)
-                }
-
-                try? context.save()
-            }
+            self.container.storeArticles(from: response, request: request)
         }
     }
 }

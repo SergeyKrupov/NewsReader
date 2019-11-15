@@ -9,7 +9,7 @@
 import ObjectMapper
 
 struct EverythingRequest {
-    var request: String?
+    var query: String?
     var qInTitle: String?
     var sources: [String]?
     var domains: [String]?
@@ -38,7 +38,7 @@ extension EverythingRequest: Mappable {
     }
 
     mutating func mapping(map: Map) {
-        request <- map["q"]
+        query <- map["q"]
         qInTitle <- map["qInTitle"]
         // TODO: sources
         // TODO: domains
