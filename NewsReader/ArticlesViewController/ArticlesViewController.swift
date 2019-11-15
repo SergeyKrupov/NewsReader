@@ -58,7 +58,6 @@ final class ArticlesViewController: UIViewController, ArticlesViewProtocol {
     private lazy var queryTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.delegate = self
         textField.borderStyle = .roundedRect
         textField.addTarget(self, action: #selector(startSearch(_:)), for: .editingDidEndOnExit)
         return textField
@@ -114,15 +113,5 @@ extension ArticlesViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: articleCellID, for: indexPath) as! ArticleTableViewCell
         cell.setup(with: article)
         return cell
-    }
-}
-
-extension ArticlesViewController: UITextFieldDelegate {
-
-    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
-        guard reason == .committed, let query = queryTextField.text, !query.isEmpty else {
-            return
-        }
-        presenter.search(query: query)
     }
 }
