@@ -13,6 +13,7 @@ protocol ArticlesPresenterProtocol {
     var numberOfArticles: Int { get }
 
     func article(at indexPath: IndexPath) -> ArticleObject
+    func search(query: String, ignoreCache: Bool)
 }
 
 final class ArticlesViewController: UIViewController, ArticlesViewProtocol {
@@ -31,6 +32,8 @@ final class ArticlesViewController: UIViewController, ArticlesViewProtocol {
             make.top.equalTo(tableView.safeAreaLayoutGuide.snp.top)
             make.bottom.equalTo(tableView.safeAreaLayoutGuide.snp.bottom)
         }
+
+        presenter.search(query: "bitcoin", ignoreCache: true)
     }
 
     // MARK: - Private

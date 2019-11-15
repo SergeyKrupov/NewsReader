@@ -5,15 +5,16 @@
         <attribute name="author" optional="YES" attributeType="String"/>
         <attribute name="content" optional="YES" attributeType="String"/>
         <attribute name="imageURL" optional="YES" attributeType="String"/>
+        <attribute name="index" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="publicationDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
     </entity>
     <entity name="RequestObject" representedClassName="RequestObject" syncable="YES" codeGenerationType="class">
-        <attribute name="loadedPages" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="fetchedArticles" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="query" optional="YES" attributeType="String"/>
-        <attribute name="totalPages" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="totalArticles" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
     <elements>
-        <element name="ArticleObject" positionX="-63" positionY="-18" width="128" height="118"/>
+        <element name="ArticleObject" positionX="-63" positionY="-18" width="128" height="133"/>
         <element name="RequestObject" positionX="-54" positionY="27" width="128" height="88"/>
     </elements>
 </model>

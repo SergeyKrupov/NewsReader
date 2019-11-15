@@ -16,7 +16,7 @@ struct Article {
     let description: String
     let url: String
     let urlToImage: String
-    let publishedAt: String
+    let publishedAt: Date
     let content: String
 }
 
@@ -29,7 +29,7 @@ extension Article: ImmutableMappable {
         description = try map.value("description")
         url = try map.value("url")
         urlToImage = try map.value("urlToImage")
-        publishedAt = try map.value("publishedAt")
+        publishedAt = try map.value("publishedAt", using: ISO8601DateTransform())
         content = try map.value("content")
     }
 }

@@ -11,7 +11,6 @@
 		A5400291237E9BC400475276 /* PersistentContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5400290237E9BC400475276 /* PersistentContainer.swift */; };
 		A5400293237E9BFB00475276 /* PersistentContainerAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5400292237E9BFB00475276 /* PersistentContainerAssembly.swift */; };
 		A58B77BD237E689B00CDBC3D /* Articles.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A58B77BB237E689B00CDBC3D /* Articles.xcdatamodeld */; };
-		A58B77BF237E6CD100CDBC3D /* ContentDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58B77BE237E6CD100CDBC3D /* ContentDownloadManager.swift */; };
 		A58B77C4237E8ED500CDBC3D /* ArticlesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58B77C3237E8ED500CDBC3D /* ArticlesViewController.swift */; };
 		A58B77C6237E8F4900CDBC3D /* ArticlesPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58B77C5237E8F4900CDBC3D /* ArticlesPresenter.swift */; };
 		A58B77C8237E8FFB00CDBC3D /* ArticlesAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58B77C7237E8FFB00CDBC3D /* ArticlesAssembly.swift */; };
@@ -36,7 +35,6 @@
 		A5400290237E9BC400475276 /* PersistentContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentContainer.swift; sourceTree = "<group>"; };
 		A5400292237E9BFB00475276 /* PersistentContainerAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentContainerAssembly.swift; sourceTree = "<group>"; };
 		A58B77BC237E689B00CDBC3D /* Articles.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Articles.xcdatamodel; sourceTree = "<group>"; };
-		A58B77BE237E6CD100CDBC3D /* ContentDownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentDownloadManager.swift; sourceTree = "<group>"; };
 		A58B77C3237E8ED500CDBC3D /* ArticlesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticlesViewController.swift; sourceTree = "<group>"; };
 		A58B77C5237E8F4900CDBC3D /* ArticlesPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticlesPresenter.swift; sourceTree = "<group>"; };
 		A58B77C7237E8FFB00CDBC3D /* ArticlesAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticlesAssembly.swift; sourceTree = "<group>"; };
@@ -91,7 +89,6 @@
 			isa = PBXGroup;
 			children = (
 				A58B77BB237E689B00CDBC3D /* Articles.xcdatamodeld */,
-				A58B77BE237E6CD100CDBC3D /* ContentDownloadManager.swift */,
 				A5400290237E9BC400475276 /* PersistentContainer.swift */,
 				A5400292237E9BFB00475276 /* PersistentContainerAssembly.swift */,
 			);
@@ -339,7 +336,6 @@
 				A5F14DC0237E9666004B24E5 /* ArticleTableViewCell.swift in Sources */,
 				A58B77C4237E8ED500CDBC3D /* ArticlesViewController.swift in Sources */,
 				A5CA5F8B237DC48C005D5D15 /* NewsApi.swift in Sources */,
-				A58B77BF237E6CD100CDBC3D /* ContentDownloadManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
