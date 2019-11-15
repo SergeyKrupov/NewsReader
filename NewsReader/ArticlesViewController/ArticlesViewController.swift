@@ -12,9 +12,9 @@ import UIKit
 protocol ArticlesPresenterProtocol {
     var numberOfArticles: Int { get }
 
-    func didFinishLoading()
     func article(at indexPath: IndexPath) -> ArticleObject
-    func search(query: String, ignoreCache: Bool)
+    func didFinishLoading()
+    func search(query: String)
 }
 
 final class ArticlesViewController: UIViewController, ArticlesViewProtocol {
@@ -26,17 +26,20 @@ final class ArticlesViewController: UIViewController, ArticlesViewProtocol {
         super.viewDidLoad()
 
         view.addSubview(tableView)
+        view.addSubview(queryTextField)
 
-        view.snp.makeConstraints { make in
-            make.leading.equalTo(tableView.snp.leading)
-            make.trailing.equalTo(tableView.snp.trailing)
-            make.top.equalTo(tableView.safeAreaLayoutGuide.snp.top)
-            make.bottom.equalTo(tableView.safeAreaLayoutGuide.snp.bottom)
+        queryTextField.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.leading.equalTo(view.snp.leading)
+            make.trailing.equalTo(view.snp.trailing)
+            make.height.equalTo(50)
         }
 
-        //FIXME:
-        if presenter.numberOfArticles == 0 {
-            presenter.search(query: "bitcoin", ignoreCache: true)
+        tableView.snp.makeConstraints { make in
+            make.top.equalTo(queryTextField.snp.bottom)
+            make.leading.equalTo(view.snp.leading)
+            make.trailing.equalTo(view.snp.trailing)
+            make.bottom.equalTo(view.snp.bottom)
         }
 
         presenter.didFinishLoading()
@@ -45,20 +48,55 @@ final class ArticlesViewController: UIViewController, ArticlesViewProtocol {
     // MARK: - ArticlesViewProtocol
 
     func reloadTable() {
+        refreshControl.endRefreshing()
         tableView.reloadData()
     }
 
     // MARK: - Private
     private let articleCellID = "ArticleTableViewCell"
 
+    private lazy var queryTextField: UITextField = {
+        let textField = UITextField()
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.delegate = self
+        textField.borderStyle = .roundedRect
+        textField.addTarget(self, action: #selector(startSearch(_:)), for: .editingDidEndOnExit)
+        return textField
+    }()
+
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.refreshControl = refreshControl
         tableView.register(ArticleTableViewCell.self, forCellReuseIdentifier: articleCellID)
         tableView.delegate = self
         tableView.dataSource = self
         return tableView
     }()
+
+    private lazy var refreshControl: UIRefreshControl = {
+        let control = UIRefreshControl()
+        control.addTarget(self, action: #selector(refreshArticles(_:)), for: .valueChanged)
+        return control
+    }()
+
+    @objc
+    private func refreshArticles(_ sender: UIRefreshControl) {
+        guard let query = queryTextField.text, !query.isEmpty else {
+            refreshControl.endRefreshing()
+            return
+        }
+        presenter.search(query: query)
+    }
+
+    @objc
+    private func startSearch(_ sender: UITextField) {
+        guard let query = queryTextField.text, !query.isEmpty else {
+            return
+        }
+        queryTextField.resignFirstResponder()
+        presenter.search(query: query)
+    }
 }
 
 extension ArticlesViewController: UITableViewDelegate {
@@ -76,5 +114,15 @@ extension ArticlesViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: articleCellID, for: indexPath) as! ArticleTableViewCell
         cell.setup(with: article)
         return cell
+    }
+}
+
+extension ArticlesViewController: UITextFieldDelegate {
+
+    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
+        guard reason == .committed, let query = queryTextField.text, !query.isEmpty else {
+            return
+        }
+        presenter.search(query: query)
     }
 }

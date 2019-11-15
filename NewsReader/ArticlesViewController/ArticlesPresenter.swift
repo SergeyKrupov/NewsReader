@@ -50,7 +50,7 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
         return fetchedResultsController.object(at: indexPath)
     }
 
-    func search(query: String, ignoreCache: Bool) {
+    func search(query: String) {
         searchIgnoringCache(query: query)
     }
 
