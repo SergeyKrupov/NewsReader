@@ -12,6 +12,7 @@ import Moya
 protocol ArticlesViewProtocol: class {
 
     func reloadTable()
+    func setQueryText(_ text: String?)
 }
 
 final class ArticlesPresenter: ArticlesPresenterProtocol {
@@ -48,6 +49,8 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
     }
 
     func didFinishLoading() {
+        let query = container.requestObject(from: container.viewContext).query
+        view?.setQueryText(query)
         try? self.fetchedResultsController.performFetch()
         view?.reloadTable()
     }

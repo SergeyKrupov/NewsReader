@@ -53,6 +53,10 @@ final class ArticlesViewController: UIViewController, ArticlesViewProtocol {
         tableView.reloadData()
     }
 
+    func setQueryText(_ text: String?) {
+        queryTextField.text = text
+    }
+
     // MARK: - Private
     private let articleCellID = "ArticleTableViewCell"
 
