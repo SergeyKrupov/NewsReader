@@ -34,6 +34,11 @@ final class ArticlesViewController: UIViewController, ArticlesViewProtocol {
             make.bottom.equalTo(tableView.safeAreaLayoutGuide.snp.bottom)
         }
 
+        //FIXME:
+        if presenter.numberOfArticles == 0 {
+            presenter.search(query: "bitcoin", ignoreCache: true)
+        }
+
         presenter.didFinishLoading()
     }
 

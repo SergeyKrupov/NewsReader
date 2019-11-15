@@ -44,7 +44,10 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
     }
 
     func article(at indexPath: IndexPath) -> ArticleObject {
-        fetchedResultsController.object(at: indexPath)
+        if indexPath.row + 1 == numberOfArticles {
+            loadNext()
+        }
+        return fetchedResultsController.object(at: indexPath)
     }
 
     func search(query: String, ignoreCache: Bool) {
@@ -60,6 +63,7 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
     private weak var view: ArticlesViewProtocol?
     private let newsService: NewsApiService
     private let container: PersistentContainer
+    private let pageSize = 20
 
     private let context: NSManagedObjectContext
     private var requestCancellable: Cancellable?
@@ -74,7 +78,7 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
     }()
 
     private func searchIgnoringCache(query: String) {
-        let request = EverythingRequest(request: query)
+        let request = EverythingRequest(request: query, pageSize: pageSize)
         requestCancellable?.cancel()
         requestCancellable = newsService.requestEverything(request) { [weak self] result in
             guard let `self` = self, let response = try? result.get() else {
@@ -88,6 +92,8 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
                 let requestObject = container.requestObject(from: context)
                 requestObject.query = query
                 requestObject.totalArticles = Int32(response.totalResults)
+                requestObject.fetchedArticles = Int32(response.articles.count)
+                requestObject.fetchedPages = 1
 
                 for (offset, article) in response.articles.enumerated() {
                     let articleObject = ArticleObject(context: context)
@@ -100,6 +106,49 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
                 }
 
                 try? context.save()
+            }
+        }
+    }
+
+    private func loadNext() {
+        self.context.perform { [weak self] in
+            guard let `self` = self else {
+                return
+            }
+
+            let requestObject = self.container.requestObject(from: self.context)
+
+            let query = requestObject.query!
+            let page = requestObject.fetchedPages
+            let request = EverythingRequest(request: query, pageSize: self.pageSize, page: Int(page))
+            self.requestCancellable?.cancel()
+            self.requestCancellable = self.newsService.requestEverything(request) { [weak self] result in
+                guard let `self` = self, let response = try? result.get() else {
+                    return
+                }
+
+                self.context.perform { [context = self.context, container = self.container] in
+
+                    let requestObject = container.requestObject(from: context)
+                    let index = requestObject.totalArticles
+
+                    requestObject.query = query
+                    requestObject.totalArticles += Int32(response.totalResults)
+                    requestObject.fetchedArticles = Int32(response.articles.count)
+                    requestObject.fetchedPages = page + 1
+
+                    for (offset, article) in response.articles.enumerated() {
+                        let articleObject = ArticleObject(context: context)
+                        articleObject.articleDescription = article.description
+                        articleObject.author = article.author
+                        articleObject.content = article.content
+                        articleObject.imageURL = article.urlToImage
+                        articleObject.publicationDate = article.publishedAt
+                        articleObject.index = index + Int32(offset)
+                    }
+
+                    try? context.save()
+                }
             }
         }
     }

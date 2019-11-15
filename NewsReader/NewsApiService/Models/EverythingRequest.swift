@@ -47,5 +47,7 @@ extension EverythingRequest: Mappable {
         toDate <- (map["to"], ISO8601DateTransform())
         language <- map["language"]
         sortBy <- map["sortBy"]
+        pageSize <- map["pageSize"]
+        page <- map["page"]
     }
 }
