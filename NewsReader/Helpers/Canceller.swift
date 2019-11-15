@@ -19,10 +19,9 @@ final class Canceller {
         self.cancellable = cancellable
     }
 
-    static func <<(canceller: Canceller, _ cancellable: Cancellable?) {
+    static func << (canceller: Canceller, _ cancellable: Cancellable?) {
         canceller.setCancellable(cancellable)
     }
 
     private var cancellable: Cancellable?
 }
-

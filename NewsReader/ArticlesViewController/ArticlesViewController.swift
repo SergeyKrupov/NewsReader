@@ -69,6 +69,7 @@ final class ArticlesViewController: UIViewController, ArticlesViewProtocol {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.refreshControl = refreshControl
         tableView.register(ArticleTableViewCell.self, forCellReuseIdentifier: articleCellID)
+        tableView.rowHeight = 80
         tableView.delegate = self
         tableView.dataSource = self
         return tableView

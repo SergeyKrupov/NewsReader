@@ -111,6 +111,7 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
                     articleObject.content = article.content
                     articleObject.imageURL = article.urlToImage
                     articleObject.publicationDate = article.publishedAt
+                    articleObject.title = article.title
                     articleObject.index = Int32(offset)
                 }
 
@@ -158,6 +159,7 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
                     articleObject.content = article.content
                     articleObject.imageURL = article.urlToImage
                     articleObject.publicationDate = article.publishedAt
+                    articleObject.title = article.title
                     articleObject.index = index + Int32(offset)
                 }
 
