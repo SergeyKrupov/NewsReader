@@ -28,7 +28,7 @@ final class ContentDownloadManagerImpl: ContentDownloadManager {
             do {
                 let response = try result.get()
                 container.performBackgroundTask { context in
-                    response.
+                    //response.
                 }
             } catch {
                 completion(error)
