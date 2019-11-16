@@ -73,6 +73,7 @@ final class ArticlesViewController: UIViewController, ArticlesViewProtocol {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.borderStyle = .roundedRect
+        textField.placeholder = "Запрос"
         textField.addTarget(self, action: #selector(startSearch(_:)), for: .editingDidEndOnExit)
         return textField
     }()

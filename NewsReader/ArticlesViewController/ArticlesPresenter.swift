@@ -97,11 +97,11 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
             }
 
             self.performingAction = .none
-            guard let response = try? result.get() else {
-                return
+            do {
+                self.storeArticles(from: try result.get(), request: request, completion: self.errorHandler)
+            } catch {
+                self.errorHandler(error)
             }
-
-            self.storeArticles(from: response, request: request, completion: self.errorHandler)
         }
     }
 
