@@ -6,6 +6,7 @@
 //  Copyright © 2019 Sergey V. Krupov. All rights reserved.
 //
 
+import CoreData
 import Swinject
 
 final class ArticlesAssembly: Assembly {
@@ -17,7 +18,7 @@ final class ArticlesAssembly: Assembly {
             let presenter = ArticlesPresenter(
                 view: view,
                 newsService: resolver.resolve(NewsApiService.self)!,
-                container: resolver.resolve(PersistentContainer.self)!
+                container: resolver.resolve(NSPersistentContainer.self)!
             )
 
             view.presenter = presenter

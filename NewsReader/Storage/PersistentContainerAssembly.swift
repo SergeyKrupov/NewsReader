@@ -12,13 +12,8 @@ import Swinject
 final class PersistentContainerAssembly: Assembly {
 
     func assemble(container: Container) {
-        container.register(PersistentContainer.self) { _ in
-            let bundle = Bundle(for: type(of: self))
-            guard let url = bundle.url(forResource: "Articles", withExtension: "momd"),
-                let model = NSManagedObjectModel(contentsOf: url) else {
-                    fatalError("Ошибка конфигурации стэка CoreData")
-            }
-            return PersistentContainer(name: "Articles", managedObjectModel: model)
+        container.register(NSPersistentContainer.self) { _ in
+            NSPersistentContainer(name: "Articles")
         }
         .inObjectScope(.container)
     }
