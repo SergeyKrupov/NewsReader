@@ -23,8 +23,7 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
         self.view = view
         self.newsService = newsService
         self.container = container
-
-        context = container.newBackgroundContext()
+        context.parent = container.viewContext
 
         let center = NotificationCenter.default
         token = center.addObserver(forName: .NSManagedObjectContextDidSave, object: context, queue: OperationQueue.main) { [weak self] _ in
@@ -34,6 +33,12 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
             try? self.fetchedResultsController.performFetch()
             self.view?.reloadTable()
             self.view?.endRefreshing()
+
+            do {
+                try self.container.viewContext.save()
+            } catch {
+                self.errorHandler(error)
+            }
         }
     }
 
@@ -49,7 +54,6 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
     // Ищем новости по введённому пользователем запросу
     func search(query: String) {
         performingAction = .search
-        lastQuery = query
         let request = EverythingRequest(query: query, pageSize: pageSize)
         canceller << newsService.requestEverything(request) { [weak self] result in
             assert(Thread.isMainThread)
@@ -69,8 +73,8 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
     // Завершение загрузки экрана
     func didFinishLoading() {
         do {
-            lastQuery = try container.viewContext.requestObject().query
-            view?.setQueryText(lastQuery)
+            let query = try container.viewContext.requestObject().query
+            view?.setQueryText(query)
             try self.fetchedResultsController.performFetch()
             view?.reloadTable()
         } catch {
@@ -92,8 +96,12 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
             return
         }
 
+        guard let query = requestObject.query else {
+            assertionFailure("Некорректное состояние приложения")
+            return
+        }
+
         performingAction = .loadingNextPage
-        let query = requestObject.query!
         let page = requestObject.fetchedPages
         let request = EverythingRequest(query: query, pageSize: self.pageSize, page: Int(page))
         canceller << self.newsService.requestEverything(request) { [weak self] result in
@@ -112,7 +120,7 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
     }
 
     func refreshResult() {
-        guard let query = lastQuery else {
+        guard let query = try? container.viewContext.requestObject().query else {
             view?.endRefreshing()
             return
         }
@@ -128,12 +136,11 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
     private let container: NSPersistentContainer
     private let pageSize = 20
     private let canceller = Canceller()
+    private let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
 
     private weak var view: ArticlesViewProtocol?
-    private var context: NSManagedObjectContext!
     private var token: NSObjectProtocol?
     private var performingAction: Action = .none
-    private var lastQuery: String?
 
     private lazy var fetchedResultsController: NSFetchedResultsController<ArticleObject> = {
         let request: NSFetchRequest<ArticleObject> = ArticleObject.fetchRequest()
@@ -161,7 +168,7 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
 private extension ArticlesPresenter {
 
     func storeArticles(from response: EverythingResponse, request: EverythingRequest, completion: @escaping (Error?) -> Void) {
-        context.perform { [context = context!, coordinator = container.persistentStoreCoordinator] in
+        context.perform { [context, coordinator = container.persistentStoreCoordinator] in
             do {
                 let requestObject = try context.requestObject()
                 let page = request.page ?? 0
