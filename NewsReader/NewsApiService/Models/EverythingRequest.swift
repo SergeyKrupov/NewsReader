@@ -40,9 +40,9 @@ extension EverythingRequest: Mappable {
     mutating func mapping(map: Map) {
         query <- map["q"]
         qInTitle <- map["qInTitle"]
-        // TODO: sources
-        // TODO: domains
-        // TODO: excludeDomains
+        sources <- (map["sources"], CommaSeparatedListTransform())
+        domains <- (map["domains"], CommaSeparatedListTransform())
+        excludeDomains <- (map["excludeDomains"], CommaSeparatedListTransform())
         fromDate <- (map["from"], ISO8601DateTransform())
         toDate <- (map["to"], ISO8601DateTransform())
         language <- map["language"]
