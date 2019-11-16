@@ -7,9 +7,12 @@
 //
 
 import Moya
+import ObjectMapper
 
 enum NewsApiServiceError: Error {
     case internalInconsistency
+    case unexpectedResponse
+    case apiError(code: String, message: String)
 }
 
 protocol NewsApiService {
@@ -34,9 +37,17 @@ final class NewsApiServiceImpl: NewsApiService {
                 guard let json = try response.mapJSON(failsOnEmptyData: true) as? [String: Any] else {
                     throw NewsApiServiceError.internalInconsistency
                 }
-                // TODO: handle error
-                let object = try EverythingResponse(JSON: json)
-                completion(.success(object))
+
+                let baseResponse = BaseResponse(JSON: json)
+
+                switch baseResponse {
+                case let response as EverythingResponse:
+                    completion(.success(response))
+                case let response as ErrorResponse:
+                    throw NewsApiServiceError.apiError(code: response.code, message: response.message)
+                default:
+                    throw NewsApiServiceError.unexpectedResponse
+                }
             } catch {
                 completion(.failure(error))
             }

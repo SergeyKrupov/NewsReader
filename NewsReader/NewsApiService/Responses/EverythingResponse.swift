@@ -9,17 +9,12 @@
 import Foundation
 import ObjectMapper
 
-struct EverythingResponse {
-    let status: String
+final class EverythingResponse: BaseResponse, ImmutableMappable {
     let totalResults: Int
     let articles: [Article]
-}
-
-extension EverythingResponse: ImmutableMappable {
 
     init(map: Map) throws {
-        status = try map.value("status")
-        totalResults = try map.value("totalResults")
-        articles = try map.value("articles")
-    }
+         totalResults = try map.value("totalResults")
+         articles = try map.value("articles")
+     }
 }
