@@ -49,8 +49,11 @@ final class ArticlesViewController: UIViewController, ArticlesViewProtocol {
     // MARK: - ArticlesViewProtocol
 
     func reloadTable() {
-        refreshControl.endRefreshing()
         tableView.reloadData()
+    }
+
+    func endRefreshing() {
+        refreshControl.endRefreshing()
     }
 
     func setQueryText(_ text: String?) {

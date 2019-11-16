@@ -12,6 +12,7 @@ import Moya
 protocol ArticlesViewProtocol: class {
 
     func reloadTable()
+    func endRefreshing()
     func setQueryText(_ text: String?)
 }
 
@@ -31,6 +32,7 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
             }
             try? self.fetchedResultsController.performFetch()
             self.view?.reloadTable()
+            self.view?.endRefreshing()
         }
     }
 
@@ -46,7 +48,8 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
     // Ищем новости по введённому пользователем запросу
     func search(query: String) {
         performingAction = .search
-        let request = EverythingRequest(query: query, pageSize: pageSize)
+        //FIXME:
+        let request = EverythingRequest(query: query, fromDate: Date(timeIntervalSince1970: 0), pageSize: pageSize)
         canceller << newsService.requestEverything(request) { [weak self] result in
             assert(Thread.isMainThread)
             guard let `self` = self else {
@@ -126,40 +129,14 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
     }()
 
     private var errorHandler: (Error?) -> Void {
-        return { _ in
-            // TODO:
-        }
-    }
-
-    private func loadNextPage() {
-        assert(Thread.isMainThread)
-        guard performingAction == .none else {
-            return
-        }
-
-        let requestObject: RequestObject
-        do {
-            requestObject = try container.viewContext.requestObject()
-        } catch {
-            errorHandler(error)
-            return
-        }
-
-        performingAction = .loadingNextPage
-        let query = requestObject.query!
-        let page = requestObject.fetchedPages
-        let request = EverythingRequest(query: query, pageSize: self.pageSize, page: Int(page))
-        canceller << self.newsService.requestEverything(request) { [weak self] result in
-            assert(Thread.isMainThread)
-            guard let `self` = self else {
+        return { [weak self] error in
+            guard let `self` = self, let error = error else {
                 return
             }
-            self.performingAction = .none
-            do {
-                self.storeArticles(from: try result.get(), request: request, completion: self.errorHandler)
-            } catch {
-                self.errorHandler(error)
+            if (error as NSError).domain == NSURLErrorDomain && (error as NSError).code == NSURLErrorCancelled {
+                return
             }
+            self.view?.endRefreshing()
         }
     }
 }
