@@ -22,8 +22,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             assert(error == nil)
         }
 
+        let navController = UINavigationController(rootViewController: container.resolve(ArticlesViewController.self)!)
+        navController.navigationBar.prefersLargeTitles = true
+
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = container.resolve(ArticlesViewController.self)
+        window?.rootViewController = navController
         window?.makeKeyAndVisible()
 
         return true

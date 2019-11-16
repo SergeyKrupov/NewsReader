@@ -16,6 +16,7 @@ protocol ArticlesPresenterProtocol {
 
     func didFinishLoading()
     func search(query: String)
+    func refreshResult()
 }
 
 final class ArticlesViewController: UIViewController, ArticlesViewProtocol {
@@ -23,27 +24,24 @@ final class ArticlesViewController: UIViewController, ArticlesViewProtocol {
     // MARK: - Dependencies
     var presenter: ArticlesPresenterProtocol!
 
+    override func loadView() {
+        view = tableView
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        view.addSubview(tableView)
-        view.addSubview(queryTextField)
-
-        queryTextField.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.leading.equalTo(view.snp.leading)
-            make.trailing.equalTo(view.snp.trailing)
-            make.height.equalTo(50)
-        }
-
-        tableView.snp.makeConstraints { make in
-            make.top.equalTo(queryTextField.snp.bottom)
-            make.leading.equalTo(view.snp.leading)
-            make.trailing.equalTo(view.snp.trailing)
-            make.bottom.equalTo(view.snp.bottom)
-        }
-
+        setupNavigationItem()
         presenter.didFinishLoading()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationItem.hidesSearchBarWhenScrolling = false
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationItem.hidesSearchBarWhenScrolling = true
     }
 
     // MARK: - ArticlesViewProtocol
@@ -57,7 +55,7 @@ final class ArticlesViewController: UIViewController, ArticlesViewProtocol {
     }
 
     func setQueryText(_ text: String?) {
-        queryTextField.text = text
+        navigationItem.title = text ?? emptyTitle
     }
 
     func presentError(message: String) {
@@ -68,15 +66,7 @@ final class ArticlesViewController: UIViewController, ArticlesViewProtocol {
 
     // MARK: - Private
     private let articleCellID = "ArticleTableViewCell"
-
-    private lazy var queryTextField: UITextField = {
-        let textField = UITextField()
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.borderStyle = .roundedRect
-        textField.placeholder = "Запрос"
-        textField.addTarget(self, action: #selector(startSearch(_:)), for: .editingDidEndOnExit)
-        return textField
-    }()
+    private let emptyTitle = "Поиск новостей"
 
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
@@ -95,22 +85,21 @@ final class ArticlesViewController: UIViewController, ArticlesViewProtocol {
         return control
     }()
 
-    @objc
-    private func refreshArticles(_ sender: UIRefreshControl) {
-        guard let query = queryTextField.text, !query.isEmpty else {
-            refreshControl.endRefreshing()
-            return
-        }
-        presenter.search(query: query)
+    private lazy var searchController: UISearchController = {
+        let controller = UISearchController(searchResultsController: nil)
+        controller.searchBar.delegate = self
+        return controller
+    }()
+
+    private func setupNavigationItem() {
+        navigationItem.searchController = searchController
+        navigationItem.largeTitleDisplayMode = .automatic
+        navigationItem.title = emptyTitle
     }
 
     @objc
-    private func startSearch(_ sender: UITextField) {
-        guard let query = queryTextField.text, !query.isEmpty else {
-            return
-        }
-        queryTextField.resignFirstResponder()
-        presenter.search(query: query)
+    private func refreshArticles(_ sender: UIRefreshControl) {
+        presenter.refreshResult()
     }
 }
 
@@ -132,5 +121,16 @@ extension ArticlesViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: articleCellID, for: indexPath) as! ArticleTableViewCell
         cell.setup(with: article)
         return cell
+    }
+}
+
+extension ArticlesViewController: UISearchBarDelegate {
+
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let query = searchBar.text, !query.isEmpty else {
+            return
+        }
+        searchController.isActive = false
+        presenter.search(query: query)
     }
 }

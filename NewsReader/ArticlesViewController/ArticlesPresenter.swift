@@ -49,6 +49,7 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
     // Ищем новости по введённому пользователем запросу
     func search(query: String) {
         performingAction = .search
+        lastQuery = query
         let request = EverythingRequest(query: query, pageSize: pageSize)
         canceller << newsService.requestEverything(request) { [weak self] result in
             assert(Thread.isMainThread)
@@ -56,6 +57,7 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
                 return
             }
             self.performingAction = .none
+            self.view?.setQueryText(query)
             do {
                 self.storeArticles(from: try result.get(), request: request, completion: self.errorHandler)
             } catch {
@@ -66,10 +68,14 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
 
     // Завершение загрузки экрана
     func didFinishLoading() {
-        let query = try? container.viewContext.requestObject().query
-        view?.setQueryText(query)
-        try? self.fetchedResultsController.performFetch()
-        view?.reloadTable()
+        do {
+            lastQuery = try container.viewContext.requestObject().query
+            view?.setQueryText(lastQuery)
+            try self.fetchedResultsController.performFetch()
+            view?.reloadTable()
+        } catch {
+            errorHandler(error)
+        }
     }
 
     // Событие показа ячейки со статьёй в таблице
@@ -105,6 +111,14 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
         }
     }
 
+    func refreshResult() {
+        guard let query = lastQuery else {
+            view?.endRefreshing()
+            return
+        }
+        search(query: query)
+    }
+
     // MARK: - Private
     enum Action {
         case none, search, loadingNextPage
@@ -119,6 +133,8 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
     private var context: NSManagedObjectContext!
     private var token: NSObjectProtocol?
     private var performingAction: Action = .none
+    private var lastQuery: String?
+
     private lazy var fetchedResultsController: NSFetchedResultsController<ArticleObject> = {
         let request: NSFetchRequest<ArticleObject> = ArticleObject.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(keyPath: \ArticleObject.index, ascending: true)]
