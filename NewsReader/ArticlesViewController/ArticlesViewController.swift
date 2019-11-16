@@ -30,6 +30,7 @@ final class ArticlesViewController: UIViewController, ArticlesViewProtocol {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        definesPresentationContext = true
         setupNavigationItem()
         presenter.didFinishLoading()
     }
