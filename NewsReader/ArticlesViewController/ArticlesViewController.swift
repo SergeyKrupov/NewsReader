@@ -60,6 +60,12 @@ final class ArticlesViewController: UIViewController, ArticlesViewProtocol {
         queryTextField.text = text
     }
 
+    func presentError(message: String) {
+        let alert = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
+
     // MARK: - Private
     private let articleCellID = "ArticleTableViewCell"
 

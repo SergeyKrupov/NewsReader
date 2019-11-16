@@ -14,6 +14,7 @@ protocol ArticlesViewProtocol: class {
     func reloadTable()
     func endRefreshing()
     func setQueryText(_ text: String?)
+    func presentError(message: String)
 }
 
 final class ArticlesPresenter: ArticlesPresenterProtocol {
@@ -48,8 +49,7 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
     // Ищем новости по введённому пользователем запросу
     func search(query: String) {
         performingAction = .search
-        //FIXME:
-        let request = EverythingRequest(query: query, fromDate: Date(timeIntervalSince1970: 0), pageSize: pageSize)
+        let request = EverythingRequest(query: query, pageSize: pageSize)
         canceller << newsService.requestEverything(request) { [weak self] result in
             assert(Thread.isMainThread)
             guard let `self` = self else {
@@ -130,13 +130,14 @@ final class ArticlesPresenter: ArticlesPresenterProtocol {
 
     private var errorHandler: (Error?) -> Void {
         return { [weak self] error in
-            guard let `self` = self, let error = error else {
+            guard let `self` = self, let view = self.view, let error = error else {
                 return
             }
             if (error as NSError).domain == NSURLErrorDomain && (error as NSError).code == NSURLErrorCancelled {
                 return
             }
-            self.view?.endRefreshing()
+            view.endRefreshing()
+            view.presentError(message: error.localizedDescription)
         }
     }
 }
